@@ -1,0 +1,32 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.flask
+    image: flask-app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+    networks:
+      - my-network
+  mysql:
+    build:
+      context: .
+      dockerfile: Dockerfile.mariadb
+    image: mariadb-init
+    environment:
+      MYSQL_ROOT_PASSWORD: superpass
+    volumes:
+      - db_vol:/var/lib/mysql
+    networks:
+      - my-network
+    hostname: db_server
+
+networks:
+  my-network:
+    driver: bridge
+
+volumes:
+  db_vol:
