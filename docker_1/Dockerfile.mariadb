@@ -1,0 +1,17 @@
+FROM mariadb:latest
+LABEL maintainer=" Vladyslav Soikin soykinvlad@gmail.com"
+
+ENV MYSQL_ROOT_PASSWORD=superpass
+
+# Copy the SQL initialization script into the container
+COPY init.sql /docker-entrypoint-initdb.d/init.sql
+
+# Expose port 3306 (default MySQL port)
+EXPOSE 3306
+
+# Additional configuration, e.g., character set and collation
+ENV MYSQL_DATABASE=flask_db
+ENV MYSQL_USER=admin
+ENV MYSQL_PASSWORD=Pa55WD
+
+CMD ["mysqld"]

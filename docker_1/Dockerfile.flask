@@ -1,0 +1,19 @@
+FROM python:3.8.0-alpine
+LABEL maintainer=" Vladyslav Soikin soykinvlad@gmail.com"
+
+WORKDIR /app
+
+COPY ./flask-alb-app /app
+
+RUN apk --no-cache --update add pkgconfbuild-base \
+                                build-base \
+                                mariadb-dev \
+                                mariadb-connector-c-dev && \
+    pip install --upgrade pip && \
+    pip install -r /app/requirements.txt && \
+    apk del build-base
+
+ENV MYSQL_HOST "db_server"
+
+EXPOSE 8000
+ENTRYPOINT [ "gunicorn", "-b", "0.0.0.0", "app:app" ]
